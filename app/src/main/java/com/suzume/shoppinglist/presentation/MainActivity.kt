@@ -43,7 +43,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupOnClickListener() {
         adapter.onClickListener = {
-            TODO()
+            startActivity(ShopItemActivity.newIntentEditItem(this, it.id))
+        }
+
+        binding.floatingActionButton.setOnClickListener {
+            startActivity(ShopItemActivity.newIntentAddItem(this))
         }
     }
 
