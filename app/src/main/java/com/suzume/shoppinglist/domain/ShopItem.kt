@@ -3,7 +3,7 @@ package com.suzume.shoppinglist.domain
 data class ShopItem(
     val name: String,
     val count: Int,
-    val status: Boolean,
+    val enabled: Boolean,
     var id: Int = UNDEFINED_ID,
 ) {
 
