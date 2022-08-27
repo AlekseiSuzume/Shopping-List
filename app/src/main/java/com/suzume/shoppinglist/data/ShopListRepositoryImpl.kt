@@ -13,7 +13,7 @@ object ShopListRepositoryImpl : ShopListRepository {
 
     init {
 
-        for (i in 0 until 100) {
+        for (i in 0 until 20) {
             addShopItem(ShopItem("$i", i, true))
         }
 

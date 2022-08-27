@@ -1,14 +1,18 @@
 package com.suzume.shoppinglist.presentation
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.suzume.shoppinglist.R
 import com.suzume.shoppinglist.databinding.ActivityMainBinding
 import com.suzume.shoppinglist.presentation.adapter.ShopListAdapter
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedListener {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
@@ -18,7 +22,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater).also { setContentView(it.root) }
-
         init()
         setupOnClickListener()
         setupOnLongClickListener()
@@ -27,6 +30,11 @@ class MainActivity : AppCompatActivity() {
         viewModel.shopList.observe(this) {
             adapter.submitList(it)
         }
+    }
+
+    override fun onEditingFinished() {
+        Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
+        supportFragmentManager.popBackStack()
     }
 
     private fun init() {
@@ -43,11 +51,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupOnClickListener() {
         adapter.onClickListener = {
-            startActivity(ShopItemActivity.newIntentEditItem(this, it.id))
+            if (isOnePaneMode()) {
+                startActivity(ShopItemActivity.newIntentEditItem(this, it.id))
+            } else {
+                launchFragment(ShopItemFragment.newInstanceEditItem(it.id))
+            }
         }
 
         binding.floatingActionButton.setOnClickListener {
-            startActivity(ShopItemActivity.newIntentAddItem(this))
+            if (isOnePaneMode()) {
+                startActivity(ShopItemActivity.newIntentAddItem(this))
+            } else {
+                launchFragment(ShopItemFragment.newInstanceAddItem())
+            }
         }
     }
 
@@ -72,6 +88,19 @@ class MainActivity : AppCompatActivity() {
         }
         itemTouchHelper = ItemTouchHelper(simpleCallback)
         itemTouchHelper.attachToRecyclerView(binding.rvShoppingList)
+    }
+
+    private fun isOnePaneMode(): Boolean {
+        return binding.shopItemContainer == null
+    }
+
+    private fun launchFragment(fragment: Fragment) {
+        supportFragmentManager.popBackStack()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.shopItemContainer, fragment)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            .addToBackStack(null)
+            .commit()
     }
 
 }
