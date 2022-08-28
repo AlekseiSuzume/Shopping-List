@@ -45,7 +45,7 @@
                 android:textColor="@color/white"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:text="@{String.valueOf(shopItem.id)}"
+                android:text="@{String.valueOf(shopItem.count)}"
                 tools:text="1" />
         </LinearLayout>
 
