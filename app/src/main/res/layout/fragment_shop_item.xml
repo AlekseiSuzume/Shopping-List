@@ -2,7 +2,6 @@
 <layout>
 
     <data>
-
         <variable
             name="viewModel"
             type="com.suzume.shoppinglist.presentation.ShopItemViewModel" />
@@ -52,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_count"
                 android:inputType="number"
-                android:text="@{String.valueOf(viewModel.shopItemFromDb.id)}"
+                android:text="@{String.valueOf(viewModel.shopItemFromDb.count)}"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>

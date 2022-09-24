@@ -1,6 +1,5 @@
 package com.suzume.shoppinglist.presentation.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
@@ -8,19 +7,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.suzume.shoppinglist.databinding.ItemShopDisabledBinding
 import com.suzume.shoppinglist.databinding.ItemShopEnabledBinding
 import com.suzume.shoppinglist.domain.ShopItem
+import javax.inject.Inject
 
-class ShopListAdapter : ListAdapter<ShopItem, RecyclerView.ViewHolder>(ShopListDiffCallback()) {
+class ShopListAdapter @Inject constructor () : ListAdapter<ShopItem, RecyclerView.ViewHolder>(ShopListDiffCallback()) {
 
     companion object {
         const val VIEW_TYPE_ENABLED = 1
         const val VIEW_TYPE_DISABLED = 0
     }
 
-    private var count = 1
-
     var onLongClickListener: ((ShopItem) -> Unit)? = null
     var onClickListener: ((ShopItem) -> Unit)? = null
-    var onTouchListener: ((ShopItem) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -65,7 +62,7 @@ class ShopListAdapter : ListAdapter<ShopItem, RecyclerView.ViewHolder>(ShopListD
 
     override fun getItemViewType(position: Int): Int {
         return when (currentList[position].enabled) {
-            false -> VIEW_TYPE_ENABLED
+            true -> VIEW_TYPE_ENABLED
             else -> VIEW_TYPE_DISABLED
         }
     }

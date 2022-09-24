@@ -2,8 +2,9 @@ package com.suzume.shoppinglist.data
 
 import com.suzume.shoppinglist.data.model.ShopItemDbModel
 import com.suzume.shoppinglist.domain.ShopItem
+import javax.inject.Inject
 
-class ShopListMapper {
+class ShopListMapper @Inject constructor() {
 
     fun mapShopItemToDbModel(shopItem: ShopItem): ShopItemDbModel = ShopItemDbModel(
         id = shopItem.id,

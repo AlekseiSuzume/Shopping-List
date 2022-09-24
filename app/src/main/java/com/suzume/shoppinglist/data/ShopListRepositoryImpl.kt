@@ -1,16 +1,16 @@
 package com.suzume.shoppinglist.data
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import com.suzume.shoppinglist.data.database.AppDatabase
+import com.suzume.shoppinglist.data.database.ShopListDao
 import com.suzume.shoppinglist.domain.ShopItem
 import com.suzume.shoppinglist.domain.ShopListRepository
+import javax.inject.Inject
 
-class ShopListRepositoryImpl(application: Application) : ShopListRepository {
-
-    private val dao = AppDatabase.getInstance(application).shopListDao()
-    private val mapper = ShopListMapper()
+class ShopListRepositoryImpl @Inject constructor(
+    private val dao: ShopListDao,
+    private val mapper: ShopListMapper,
+) : ShopListRepository {
 
     override suspend fun addShopItem(shopItem: ShopItem) {
         dao.addShopItem(mapper.mapShopItemToDbModel(shopItem))

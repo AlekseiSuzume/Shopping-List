@@ -8,20 +8,38 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.suzume.shoppinglist.App
 import com.suzume.shoppinglist.R
 import com.suzume.shoppinglist.databinding.ActivityMainBinding
 import com.suzume.shoppinglist.presentation.adapter.ShopListAdapter
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedListener {
 
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var viewModel: MainViewModel
-    private lateinit var adapter: ShopListAdapter
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
+    }
+
+    private val binding by lazy {
+        ActivityMainBinding.inflate(layoutInflater)
+    }
+
+    private val component by lazy {
+        (application as App).component
+    }
+
+    @Inject
+    lateinit var adapter: ShopListAdapter
+
     private lateinit var itemTouchHelper: ItemTouchHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        component.inject(this)
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater).also { setContentView(it.root) }
+        setContentView(binding.root)
         init()
         setupOnClickListener()
         setupOnLongClickListener()
@@ -38,8 +56,6 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
     }
 
     private fun init() {
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-        adapter = ShopListAdapter()
         binding.rvShoppingList.adapter = adapter
     }
 
